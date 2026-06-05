@@ -43,7 +43,7 @@ function Participantes({ lista }: { lista: Participante[] }) {
 
   return (
     <>
-      <ul className="participante flex xl:flex-cols-3 md:flex-cols-2 sm:flex-cols-1 gap-8">
+      <ul className="participante grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
         {lista.map((p) => ( // Recorre los participantes (p) en la lista de participantes (lista)
           <div key={p.id} className={obtenerColor(p.nivel) + " p-2 rounded shadow px-3 py-2"}>
           {/* La key sirve para identificar cada elemento de la lista y mejorar el rendimiento de React */}
