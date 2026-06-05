@@ -46,7 +46,6 @@ function Participantes({ lista }: { lista: Participante[] }) {
 }
 
 function App() {
-
   // DEFINIR PARTICIPANTES CON USESTATE
   const [participantes, setParticipantes] = useState<Participante[]>(() => {
     return obtenerParticipantes();
@@ -59,7 +58,9 @@ function App() {
 
   const participantesFiltrados = participantes.filter((p) => {
     // 1. Comprobar el nombre, lo convierte todo a minúsculas
-    const coincideNombre = p.nombre.toLowerCase().includes(filtroNombre.toLowerCase());
+    const coincideNombre = p.nombre
+      .toLowerCase()
+      .includes(filtroNombre.toLowerCase());
     if (coincideNombre === false) {
       return false;
     }
@@ -80,7 +81,7 @@ function App() {
 
   // GUARDAR PARTICIPANTES
   function guardarParticipantes(participantes: Participante[]) {
-    const serializado = JSON.stringify(participantes);
+    const serializado: string = JSON.stringify(participantes);
     console.log("usuario nuevo: ", serializado);
     localStorage.setItem("participantes", serializado);
   }
@@ -121,25 +122,29 @@ function App() {
   return (
     <>
       <header>
-        <h3>Registro de participantes</h3>
+        <h3 className="bg-green-600 text-white text-4xl p-2 text-center shadow-2xl">
+          Registro de participantes
+        </h3>
       </header>
 
       <p>Participantes registrados: {participantes.length}</p>
 
       <form onSubmit={enviarFormulario}>
-        <input required name="nombre" placeholder="Nombre" />
-        <input required name="email" type="email" placeholder="Email" />
-        <input required name="edad" type="number" placeholder="Edad" />
+        <div className="flex ">
+          <input required name="nombre" placeholder="Nombre" />
+          <input required name="email" type="email" placeholder="Email" />
+          <input required name="edad" type="number" placeholder="Edad" />
 
-        <select name="pais" defaultValue="ARGENTINA">
-          <option value="ARGENTINA">Argentina</option>
-          <option value="CHILE">Chile</option>
-          <option value="URUGUAY">Uruguay</option>
-          <option value="MEXICO">México</option>
-          <option value="ESPANA">España</option>
-        </select>
+          <select name="pais" defaultValue="ARGENTINA">
+            <option value="ARGENTINA">Argentina</option>
+            <option value="CHILE">Chile</option>
+            <option value="URUGUAY">Uruguay</option>
+            <option value="MEXICO">México</option>
+            <option value="ESPANA">España</option>
+          </select>
+        </div>
 
-        <fieldset>
+        <fieldset className="flex gap-4">
           <legend>Modalidad</legend>
           <label>
             <input
@@ -160,24 +165,27 @@ function App() {
 
         <fieldset>
           <legend>Tecnologías</legend>
-          <label>
-            <input type="checkbox" name="tecnologias" value="REACT" /> React
-          </label>
-          <label>
-            <input type="checkbox" name="tecnologias" value="ANGULAR" /> Angular
-          </label>
-          <label>
-            <input type="checkbox" name="tecnologias" value="VUE" /> Vue.js
-          </label>
-          <label>
-            <input type="checkbox" name="tecnologias" value="NODE" /> Node.js
-          </label>
-          <label>
-            <input type="checkbox" name="tecnologias" value="PYTHON" /> Python
-          </label>
-          <label>
-            <input type="checkbox" name="tecnologias" value="JAVA" /> Java
-          </label>
+          <div className="grid grid-cols-4 md:grid-cols-3 sm:grid-cols-2">
+            <label>
+              <input type="checkbox" name="tecnologias" value="REACT" /> React
+            </label>
+            <label>
+              <input type="checkbox" name="tecnologias" value="ANGULAR" />{" "}
+              Angular
+            </label>
+            <label>
+              <input type="checkbox" name="tecnologias" value="VUE" /> Vue.js
+            </label>
+            <label>
+              <input type="checkbox" name="tecnologias" value="NODE" /> Node.js
+            </label>
+            <label>
+              <input type="checkbox" name="tecnologias" value="PYTHON" /> Python
+            </label>
+            <label>
+              <input type="checkbox" name="tecnologias" value="JAVA" /> Java
+            </label>
+          </div>
         </fieldset>
 
         <select name="nivel">
@@ -189,10 +197,12 @@ function App() {
         <label>
           <input required type="checkbox" name="terminos" /> Acepto términos
         </label>
-        <button type="submit">Registrar</button>
+        <button type="submit" className="bg-green-400">
+          Registrar
+        </button>
       </form>
 
-      <div className="filtros">
+      <div className="filtros flex">
         <input
           type="text"
           name="filtro-nombre"
@@ -201,8 +211,8 @@ function App() {
           value={filtroNombre}
           onChange={(e) => setFiltroNombre(e.target.value)}
         />
-        <select 
-          name="filtro-modalidad" 
+        <select
+          name="filtro-modalidad"
           id="filtro-modalidad"
           value={filtroModalidad}
           onChange={(e) => setFiltroModalidad(e.target.value)}
@@ -212,8 +222,8 @@ function App() {
           <option value="VIRTUAL">Virtual</option>
           <option value="HIBRIDO">Híbrido</option>
         </select>
-        <select 
-          name="filtro-nivel" 
+        <select
+          name="filtro-nivel"
           id="filtro-nivel"
           value={filtroNivel}
           onChange={(e) => setFiltroNivel(e.target.value)}
