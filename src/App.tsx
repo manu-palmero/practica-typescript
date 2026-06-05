@@ -5,14 +5,13 @@ import {
   type SyntheticEvent,
 } from "react";
 
+// TIPOS DE DATOS
 type Pais = "ARGENTINA" | "CHILE" | "URUGUAY" | "MEXICO" | "ESPANA";
-
 type Modalidad = "PRESENCIAL" | "VIRTUAL" | "HIBRIDO";
-
 type Tecnologia = "REACT" | "ANGULAR" | "VUE" | "NODE" | "PYTHON" | "JAVA";
-
 type Nivel = "PRINCIPIANTE" | "INTERMEDIO" | "AVANZADO";
 
+// PARTICIPANTE
 interface Participante {
   id: string;
   nombre: string;
@@ -25,19 +24,22 @@ interface Participante {
   aceptaTerminos: boolean;
 }
 
+// COMPONENTE DE PARTICIPANTES
 function Participantes({ lista }: { lista: Participante[] }) {
+  // Lista es un parámetro que requiere un tipo de dato Participante[], se pasa como <Participantes lista={participantesFiltrados} />
   return (
     <>
-      <ul className="participante">
-        {lista.map((p) => (
-          <div key={p.id}>
+      <ul className="participante flex xl:flex-cols-3 md:flex-cols-2 sm:flex-cols-1 gap-8">
+        {lista.map((p) => ( // Recorre los participantes (p) en la lista de participantes (lista)
+          <div key={p.id} className="bg-gray-100 p-2 rounded shadow">
+          {/* La key sirve para identificar cada elemento de la lista y mejorar el rendimiento de React */}
             <li>{p.nombre}</li>
             <li>{p.pais}</li>
-            <p></p>
+            {"\n\n"}
             <li>Modalidad: {p.modalidad}</li>
             <li>Nivel: {p.nivel}</li>
             <p>Tecnologías</p>
-            <li>{p.tecnologias.join(" - ")}</li>
+            <li>{p.tecnologias.join(" - ")}</li> {/* Une los elementos del array con un separador (join) */}
           </div>
         ))}
       </ul>
@@ -81,28 +83,28 @@ function App() {
 
   // GUARDAR PARTICIPANTES
   function guardarParticipantes(participantes: Participante[]) {
-    const serializado: string = JSON.stringify(participantes);
-    console.log("usuario nuevo: ", serializado);
-    localStorage.setItem("participantes", serializado);
+    const serializado: string = JSON.stringify(participantes); // Convierte de un objeto a un string en formato JSON
+    console.log("usuario nuevo: ", serializado); // log en la consola
+    localStorage.setItem("participantes", serializado); // establece (crea o actualiza) la variable participantes en el local storage, con los datos de la variable serializado
   }
 
   // OBTENER PARTICIPANTES
   function obtenerParticipantes() {
-    const participantesGuardados = localStorage.getItem("participantes");
-    if (participantesGuardados && participantesGuardados.length > 0) {
-      return JSON.parse(participantesGuardados);
-    } else {
-      return [];
+    const participantesGuardados = localStorage.getItem("participantes"); // Obtiene los participantes del local storage
+    if (participantesGuardados && participantesGuardados.length > 0) { // Si la variable no es nula y tiene al menos un elemento
+      return JSON.parse(participantesGuardados); // Convierte de JSON a objeto y lo retorna
+    } else { // Si no
+      return []; // Retorna una lista vacía
     }
   }
 
   // GUARDAR FORMULARIO
   function enviarFormulario(evento: SyntheticEvent<HTMLFormElement>) {
-    evento.preventDefault();
-    const form = evento.currentTarget;
-    const datos = new FormData(form);
+    evento.preventDefault(); // Evitar recargar la página al enviar el formulario
+    const form = evento.currentTarget; // Obtiene el formulario que disparó el evento
+    const datos = new FormData(form); // Extrae los datos del formulario de manera automática y los guarda en datos
 
-    const nuevo: Participante = {
+    const nuevo: Participante = { // Crea una variable para el participante con los datos obtenidos
       id: crypto.randomUUID(),
       nombre: datos.get("nombre") as string,
       email: datos.get("email") as string,
@@ -114,9 +116,9 @@ function App() {
       aceptaTerminos: datos.get("terminos") === "on",
     };
 
-    setParticipantes([...participantes, nuevo]);
+    setParticipantes([...participantes, nuevo]); // Actualiza la lista de participantes agregando el nuevo registro al final
     guardarParticipantes(participantes);
-    form.reset();
+    form.reset(); // Resetea el formulario
   }
 
   return (
@@ -129,8 +131,8 @@ function App() {
 
       <p>Participantes registrados: {participantes.length}</p>
 
-      <form onSubmit={enviarFormulario}>
-        <div className="flex ">
+      <form onSubmit={enviarFormulario} className="grid grid-cols-1 gap-4">
+        <div className="grid xl:grid-cols-2 md:grid-cols-1 gap-2">
           <input required name="nombre" placeholder="Nombre" />
           <input required name="email" type="email" placeholder="Email" />
           <input required name="edad" type="number" placeholder="Edad" />
@@ -153,6 +155,7 @@ function App() {
               value="PRESENCIAL"
               defaultChecked
             />{" "}
+            {/* El {" "} se usa para agregar un espacio en blanco */}
             Presencial
           </label>
           <label>
@@ -165,7 +168,9 @@ function App() {
 
         <fieldset>
           <legend>Tecnologías</legend>
-          <div className="grid grid-cols-4 md:grid-cols-3 sm:grid-cols-2">
+          {/* Las etiquetas con xl, md o sm representan el tamaño de la pantalla, 
+          haciendo referencia a las dimensiones de la pantalla (Large, Medium, Small) */}
+          <div className="grid xl:grid-cols-4 md:grid-cols-3 grid-cols-2">
             <label>
               <input type="checkbox" name="tecnologias" value="REACT" /> React
             </label>
@@ -197,11 +202,13 @@ function App() {
         <label>
           <input required type="checkbox" name="terminos" /> Acepto términos
         </label>
-        <button type="submit" className="bg-green-400">
+        <button type="submit" className="bg-green-400 rounded">
           Registrar
         </button>
       </form>
 
+      {/* Los value sirven para establecer el valor inicial del input */}
+      {/* Los onChange sirven para actualizar el estado cuando el usuario escribe en el input */}
       <div className="filtros flex">
         <input
           type="text"
@@ -234,6 +241,8 @@ function App() {
           <option value="AVANZADO">Avanzado</option>
         </select>
       </div>
+
+      {/* Implementación de la lista de participantes filtrados (componente) */}
       <Participantes lista={participantesFiltrados} />
     </>
   );
