@@ -27,11 +27,25 @@ interface Participante {
 // COMPONENTE DE PARTICIPANTES
 function Participantes({ lista }: { lista: Participante[] }) {
   // Lista es un parámetro que requiere un tipo de dato Participante[], se pasa como <Participantes lista={participantesFiltrados} />
+
+  function obtenerColor(nivel: string) {
+    if (nivel === "PRINCIPIANTE") {
+      return "bg-blue-100";
+    }
+    if (nivel === "INTERMEDIO") {
+      return "bg-yellow-100";
+    }
+    if (nivel === "AVANZADO") {
+      return "bg-red-100";
+    }
+    return "bg-gray-100";
+  }
+
   return (
     <>
       <ul className="participante flex xl:flex-cols-3 md:flex-cols-2 sm:flex-cols-1 gap-8">
         {lista.map((p) => ( // Recorre los participantes (p) en la lista de participantes (lista)
-          <div key={p.id} className="bg-gray-100 p-2 rounded shadow">
+          <div key={p.id} className={obtenerColor(p.nivel) + " p-2 rounded shadow px-3 py-2"}>
           {/* La key sirve para identificar cada elemento de la lista y mejorar el rendimiento de React */}
             <li>{p.nombre}</li>
             <li>{p.pais}</li>
